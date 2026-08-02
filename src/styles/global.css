@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+/* ============================================
+   CSS Custom Properties — Slate + Indigo palette
+   Architecture Section 7.3
+   ============================================ */
+@layer base {
+  :root {
+    /* Light mode — Slate + Indigo */
+    --color-bg: #F8FAFC;           /* Slate 50 */
+    --color-surface: #F1F5F9;      /* Slate 100 */
+    --color-text-primary: #0F172A; /* Slate 900 */
+    --color-text-muted: #475569;   /* Slate 600 */
+    --color-accent: #4F46E5;       /* Indigo 600 */
+    --color-border: #E2E8F0;       /* Slate 200 */
+  }
+
+  .dark {
+    /* Dark mode — Slate + Indigo */
+    --color-bg: #020617;           /* Slate 950 */
+    --color-surface: #0F172A;      /* Slate 900 */
+    --color-text-primary: #F8FAFC; /* Slate 50 */
+    --color-text-muted: #94A3B8;   /* Slate 400 */
+    --color-accent: #6366F1;       /* Indigo 500 */
+    --color-border: #1E293B;       /* Slate 800 */
+  }
+}
+
+/* ============================================
+   Scroll Reveal Animation
+   Architecture Section 8.1
+   ============================================ */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   Accessibility — Respect prefers-reduced-motion
+   Architecture Section 8.2 (non-negotiable)
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

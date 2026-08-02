@@ -5,13 +5,13 @@
 ### M1 — Scaffold & tooling  (unblocked — do first)
 **Goal:** Working Astro + Tailwind v4 + sitemap dev server with the Architecture Section 3 directory structure in place.
 
-- [ ] Install `tailwindcss` + `@tailwindcss/vite` (v4, NOT `@astrojs/tailwind`), `@astrojs/sitemap`
-- [ ] Configure `astro.config.mjs`: `output: 'static'`, `site` placeholder, `integrations: [sitemap()]`, `vite.plugins: [tailwindcss()]`
-- [ ] Create directory structure per Architecture Section 3: `src/{components/{layout,ui,sections},data,layouts,pages,scripts,styles}`, `public/{cv,images/{projects,og}}`
-- [ ] `src/styles/global.css`: `@import "tailwindcss"`, CSS custom properties for light/dark (Slate+Indigo per Architecture 7.3), `.reveal-on-scroll` + `prefers-reduced-motion` override (Architecture 8.1–8.2)
-- [ ] `src/data/types.ts`: `Project` and `Experience` interfaces (Architecture 5.1, verbatim)
-- [ ] `public/robots.txt` (permissive, sitemap reference — Architecture Section 9)
-- [ ] Verify `npm run dev` compiles with Tailwind utilities working
+- [x] Install `tailwindcss` + `@tailwindcss/vite` (v4, NOT `@astrojs/tailwind`), `@astrojs/sitemap`
+- [x] Configure `astro.config.mjs`: `output: 'static'`, `site` placeholder, `integrations: [sitemap()]`, `vite.plugins: [tailwindcss()]`
+- [x] Create directory structure per Architecture Section 3: `src/{components/{layout,ui,sections},data,layouts,pages,scripts,styles}`, `public/{cv,images/{projects,og}}`
+- [x] `src/styles/global.css`: `@import "tailwindcss"`, CSS custom properties for light/dark (Slate+Indigo per Architecture 7.3), `.reveal-on-scroll` + `prefers-reduced-motion` override (Architecture 8.1–8.2)
+- [x] `src/data/types.ts`: `Project` and `Experience` interfaces (Architecture 5.1, verbatim)
+- [x] `public/robots.txt` (permissive, sitemap reference — Architecture Section 9)
+- [x] Verify `npm run build` produces sitemap + Tailwind CSS v4 output (confirmed via `dist/` inspection — see Decisions log)
 
 **Maps to:** Architecture Sections 2, 3, 4, 5.1, 7.3, 8 | PRD T1, T5, T8, T9, S3, S4
 
@@ -106,7 +106,7 @@
 
 | Milestone | Status | PRs (dev→main) |
 |---|---|---|
-| M1 — Scaffold & tooling | ✅ Unblocked | 1 |
+| M1 — Scaffold & tooling | ✅ Complete | 1 |
 | M2 — Layout shell | ✅ Unblocked | 1 |
 | M3 — Data + UI primitives | ✅ Unblocked | 1 |
 | M4 — Page builds (structure) | ✅ Unblocked (content placeholdered) | 1 |
@@ -116,4 +116,4 @@
 M1–M4 can be executed back-to-back now — all unblocked foundation/structure work. 4 clean dev→main PRs deliver a fully functional (but content-incomplete) site on a Vercel preview URL. M5 and M6 wait on the owner.
 
 ## Last updated
-2026-08-02 — Milestone breakdown finalized in Plan Mode and written to Progress.md. M1–M4 unblocked and ready to execute; M5–M6 blocked on owner content/domain.
+2026-08-02 — M1 (Scaffold & tooling) complete. Build verified via `dist/` inspection: Tailwind v4.3.3 CSS output confirmed (`dist/_astro/index.CjDIl9Wr.css`), sitemap generated (`dist/sitemap-index.xml` + `dist/sitemap-0.xml`). M2–M4 unblocked and ready to execute; M5–M6 blocked on owner content/domain.

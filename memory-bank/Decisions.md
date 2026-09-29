@@ -166,3 +166,93 @@ need a browser pass and are left unchecked in Progress.md.
 ---
 
 
+---
+
+### 2026-09-29 — Resume content landed; several content gaps resolved at once
+**Context:** M3 needed work-history data for `src/data/experience.ts`, but no
+resume existed in the repo, the old live site has no timeline section at all, and
+the only experience data in the docs was the illustrative mock in Architecture 6.3.
+**Decision:** The owner supplied `docs/resume_content.md` (committed as `1cd4161`)
+as the source of truth. It unblocked four things at once:
+- `experience.ts` — six entries, highlights used verbatim, nothing rewritten
+- the M4 skills grid — resume §Core Skills / §Additional Information map onto
+  PRD A3's Frontend / Backend / Databases / Tools groups
+- the M4 static contact email required by PRD C5 (`gerypratama.o@gmail.com`)
+- the M5 bio base — the professional summary, still ⚠️ because web adaptation is
+  a separate writing task
+Education and certifications are deliberately not modelled: the `Experience`
+type has no field for them and no v1 PRD requirement covers them.
+**Source:** Owner-supplied file; PRD A2, A3, C5; Architecture 5.1.
+
+---
+
+### 2026-09-29 — INA Digital: standalone employment entry kept, secondment block omitted
+**Context:** The 2026-08-02 ruling said to omit INA Digital entirely from the work
+timeline, on the stated premise that it appeared "only as a `secondment.client`
+value". The owner-supplied resume disproves that premise: INA Digital is also a
+direct employment entry (Frontend Developer, May 2026 – Present), separate from
+the May 2024 – Dec 2024 secondment under PT. Digital Data Integrasi. Rule 01
+requires flagging a conflict like this rather than silently picking a reading.
+**Decision:** Owner confirmed (2026-09-29): keep the standalone May 2026 – Present
+`Experience` entry, and continue to omit the DDI `secondment` block entirely (not
+genericized, not reworded around). Omitting the standalone entry would have left
+/about's timeline without a current role and out of step with the resume (PRD A2),
+which is why it was raised. `.clinerules/03-content-status.md` updated to the
+refined scope, superseding the 2026-08-02 wording.
+**Source:** Owner confirmation; PRD A2; .clinerules/03-content-status.md.
+
+---
+
+### 2026-09-29 — Project live URLs confirmed (no repo URLs)
+**Context:** PRD P6 wants external links where available and permitted. IDSC's
+linkability was confirmed on 2026-08-02, but no actual URLs existed in any doc, and
+the old site's "Details" buttons expose no hrefs in their markup.
+**Decision:** Owner supplied `https://pawangbisnis.com/` (PawangBisnis),
+`https://idsc.com.sg/` (IDSC) and `https://nyambat-id.vercel.app/` (nyambat.id),
+all wired as `liveUrl`. No `repoUrl` values were provided, so none are set and the
+"Source code" link simply does not render.
+**Source:** Owner message, 2026-09-29; PRD P6.
+
+---
+
+### 2026-09-29 — ProjectCard thumbnail handling: existence-gated media, open decision-3
+**Context:** Architecture Section 3 requires thumbnails in `public/images/projects/`,
+while the non-negotiable constraint requires all images to go through Astro
+`<Image>` — and `<Image>` cannot optimize files served from `public/`. The two
+cannot both hold literally (flagged to the owner, who deferred the choice).
+Separately, no thumbnail files exist yet (M5 blocker).
+**Decision:** Pipeline decision deferred by the owner as `decision-3`. To stay
+unblocked and build-safe in the meantime:
+- `ProjectCard` gates its media block on `fs.existsSync()` for the thumbnail at
+  build time. No file → no `<img>` at all, plus a build-time warning naming the
+  missing asset. This avoids both a broken image and an empty frame (an empty frame
+  would read as placeholder content, which PRD P4 rules out), and the screenshot
+  starts rendering automatically once the asset lands in M5.
+- The media markup currently uses a plain `<img>` with explicit
+  `width`/`height`/`alt`/`loading`/`decoding` (PRD S6 + CLS target) and a
+  `TODO(decision-3)` marker. Only that one block changes if the decision goes the
+  other way, so no rework is expected.
+**Status:** OPEN — must be resolved before M4/M5 card rendering is signed off.
+**Source:** Architecture Sections 3 and 6.2 vs the `<Image>` constraint;
+.clinerules/02; PRD S6, P4, D7; owner deferral.
+
+---
+
+### 2026-09-29 — M3 milestone complete; verification evidence
+**Context:** M3's data files and `ui/` primitives are not composed into any page
+until M4, so a plain `npm run build` would not compile them — leaving syntax errors
+undetected. No type-checker is installed (`astro check` would add `@astrojs/check`
++ `typescript`, which was not approved and was therefore not added).
+**Decision:** Verified with a temporary scaffold route (`src/pages/m3-check.astro`)
+that rendered the four primitives from the real data, built it, inspected the
+emitted HTML, then deleted the scaffold and rebuilt. Evidence: 9 `<h3>` (3 cards +
+6 timeline roles), 0 secondment blocks, 3 placeholder project descriptions,
+2 × "Present" ranges, 0 `<img>` (thumbnails absent as expected), card links with
+`target="_blank"` + `rel="noopener noreferrer"`, a bare `download` attribute on the
+CV anchor, valid UTF-8 en dashes in date ranges, 0 emitted JS files, and one build
+warning per missing thumbnail. Final state: 5 routes, sitemap back to the 4
+indexable URLs. Also noted: the Header CV link now renders through
+`Button variant="link"`, which changes its colour from slate to indigo-600 /
+indigo-400 — deliberate (it is a Must-level CTA) but a visible header restyle.
+**Source:** Architecture Sections 6, 14, 15; PRD GL4, S6; M1/M2 verification precedent.
+

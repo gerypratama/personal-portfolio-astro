@@ -1,0 +1,61 @@
+---
+// src/components/ui/Button.astro
+// Architecture Section 6 — `ui` tier primitive. Used for page CTAs (PRD H2, H3)
+// and every CV download affordance (PRD H6, A4, GL4).
+//
+// Renders an <a> when `href` is supplied, otherwise a <button>. Every variant
+// keeps a visible focus ring and clears the 4.5:1 contrast minimum in both modes
+// (Architecture Section 15): white on indigo-600 is ~6:1, indigo-700 on hover
+// is higher still, so the primary variant needs no mode-specific override.
+// Indigo-500 was rejected for dark mode — white on it lands at ~4.4:1.
+
+interface Props {
+  variant?: 'primary' | 'secondary' | 'link';
+  href?: string;
+  type?: 'button' | 'submit';
+  download?: boolean;
+  external?: boolean;
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  href,
+  type = 'button',
+  download = false,
+  external = false,
+  class: className,
+} = Astro.props;
+
+const base =
+  'inline-flex items-center gap-1.5 text-sm font-medium transition-colors underline-offset-4 ' +
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:focus-visible:outline-indigo-500';
+
+const variants = {
+  primary: 'rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700',
+  secondary:
+    'rounded-md border border-slate-200 px-4 py-2 text-slate-700 hover:bg-slate-100 hover:text-slate-900 ' +
+    'dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-50',
+  link: 'text-indigo-600 hover:underline dark:text-indigo-400',
+};
+
+const classes = [base, variants[variant], className];
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      download={download}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+      class:list={classes}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class:list={classes}>
+      <slot />
+    </button>
+  )
+}

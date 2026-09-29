@@ -1,0 +1,24 @@
+---
+// src/components/ui/SkillTag.astro
+// Architecture Section 6 — `ui` tier primitive (tag pill).
+//
+// Renders an <li>, so it must be placed inside a <ul>: both consumers
+// (ProjectCard's tech stack row and the M4 skills grid) expose the tags as a
+// list rather than a run of loose text.
+
+interface Props {
+  label: string;
+  class?: string;
+}
+
+const { label, class: className } = Astro.props;
+---
+
+<li
+  class:list={[
+    'inline-flex items-center rounded-full border border-slate-200 bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-300',
+    className,
+  ]}
+>
+  {label}
+</li>

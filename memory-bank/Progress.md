@@ -38,16 +38,18 @@
 
 ---
 
-### M3 — Data layer & UI primitives  (unblocked)
+### M3 — Data layer & UI primitives  ✅ Complete (2026-09-29)
 **Goal:** Typed data files and all reusable components built and individually testable.
 
-- [ ] `src/data/projects.ts`: 3 entries (PawangBisnis, IDSC, nyambat.id) with `description: '[PLACEHOLDER — pending, see content-status.md]'`, placeholder tech stacks, `featured` flags, `liveUrl`/`repoUrl` per Decisions log (IDSC linkable, INA Digital N/A here). Export `featuredProjects` (Architecture 5.2)
-- [ ] `src/data/experience.ts`: work timeline entries from resume. INA Digital secondment omitted entirely per Decisions log — drop the `secondment` block rather than genericize. `category: 'primary' | 'prior'` grouping (Architecture 5.1)
-- [ ] `src/components/ui/Button.astro`: variant-aware (primary/secondary/link), used for CTAs and CV download
-- [ ] `src/components/ui/ProjectCard.astro`: thumbnail (Astro `<Image>` 800×450 WebP), title, description, tech stack tags, live/repo links (Architecture 6.2, Section 10)
-- [ ] `src/components/ui/SkillTag.astro`: tag pill
-- [ ] `src/components/ui/TimelineItem.astro`: main entry + conditional nested secondment block (Architecture 6.3 — though per Decisions, no secondment will render for now)
-- [ ] Skills grouped object (Frontend/Backend/Databases/Tools) — defined in `about.astro` per Architecture Section 5, not a separate file
+- [x] `src/data/projects.ts`: 3 entries (PawangBisnis, IDSC, nyambat.id). `description` kept as unshippable `[PLACEHOLDER — …]` (owner copy still ❌); `techStack: []` left empty rather than guessed (PRD P5 accuracy still ❌); `featured`/`order` per Architecture 5.2; `liveUrl` set from owner-confirmed URLs (no repo URLs were provided). Export `featuredProjects` (Architecture 5.2)
+- [x] `src/data/experience.ts`: 6 entries built from `docs/resume_content.md` (owner-supplied) with highlights verbatim — nothing rewritten. INA Digital's DDI secondment block omitted; its standalone `May 2026 – Present` entry kept (refined owner decision — see Decisions log). `category: 'primary' | 'prior'` grouping (Architecture 5.1)
+- [x] `src/components/ui/Button.astro`: variant-aware (primary/secondary/link), renders `<a>` when `href` is set and `<button>` otherwise, with `download`/`external` support; Header CV link now uses it
+- [x] `src/components/ui/ProjectCard.astro`: title, description, tech-tag row, conditional live/repo links (Architecture 6.2). The media block renders only when the thumbnail file exists at build time — no thumbnails exist yet (❌ M5), so it emits nothing and logs a build warning instead of a broken image or an empty frame. **Thumbnail markup itself is pending open decision-3** (`public/` + `<img>` vs `src/` + Astro `<Image>`)
+- [x] `src/components/ui/SkillTag.astro`: tag pill (renders an `<li>`, used inside a `<ul>`)
+- [x] `src/components/ui/TimelineItem.astro`: main entry + conditional nested secondment block (Architecture 6.3 — component supports it; no entry populates it)
+- [ ] Skills grouped object (Frontend/Backend/Databases/Tools) — lives in `about.astro` per Architecture Section 5, not a separate file → belongs to M4. Source material is now available (resume §Core Skills / §Additional Information)
+
+**Verification (2026-09-29):** `npm run build` green. Because the primitives are not composed into pages until M4, a temporary scaffold page rendered all of them from the real data; `dist/` inspection then confirmed 9 `<h3>` (3 cards + 6 timeline roles), 0 secondment blocks, 3 placeholder project descriptions, 2 × "Present" ranges, 0 `<img>` (thumbnails absent, as expected), card links with `target="_blank" rel="noopener noreferrer"`, a CV anchor emitting a bare `download` attribute, valid UTF-8 en dashes in date ranges, 0 emitted JS files, and the build warning firing once per missing thumbnail. Scaffold deleted and rebuilt afterwards: 5 routes, sitemap back to the 4 indexable URLs. Rendering of the composed components is verified in M4.
 
 **Maps to:** Architecture Sections 5, 6, 10 | PRD A2, A3, P2, P3, P5
 
@@ -112,7 +114,7 @@
 |---|---|---|
 | M1 — Scaffold & tooling | ✅ Complete | 1 |
 | M2 — Layout shell | ✅ Complete (structure verified; browser pass pending) | 1 |
-| M3 — Data + UI primitives | ✅ Unblocked | 1 |
+| M3 — Data + UI primitives | ✅ Complete | 1 |
 | M4 — Page builds (structure) | ✅ Unblocked (content placeholdered) | 1 |
 | M5 — Content integration | ❌ Blocked on owner content | — |
 | M6 — Launch & migration | ❌ Blocked on domain decision | — |
@@ -120,4 +122,4 @@
 M1–M4 can be executed back-to-back now — all unblocked foundation/structure work. 4 clean dev→main PRs deliver a fully functional (but content-incomplete) site on a Vercel preview URL. M5 and M6 wait on the owner.
 
 ## Last updated
-2026-09-29 — M2 (Layout shell & global infrastructure) complete. `BaseLayout`, `Header`, `Footer`, `ThemeToggle`, `src/scripts/{theme,animations}.ts` created and all 5 routes wired. Verified via `dist/` inspection: 5 routes built, sitemap holds the 4 indexable URLs (404 excluded), unique titles + one `h1` per page, absolute canonical/OG URLs, class-based dark variant compiled into the CSS, reduced-motion + `<noscript>` overrides present, no external JS files (both scripts inlined, far below the 10KB budget). Two doc conflicts resolved with the owner (dark-mode default, colour palette) — see Decisions log. M3 (data layer + UI primitives) is next and unblocked; M5–M6 remain blocked on owner content/domain.
+2026-09-29 — M3 (Data layer & UI primitives) complete. `src/data/{projects,experience}.ts` and `src/components/ui/{Button,ProjectCard,SkillTag,TimelineItem}.astro` created; Header CV link moved onto `Button`. The owner supplied `docs/resume_content.md`, which resolved the work-history source gap (highlights used verbatim), confirmed all three project `liveUrl`s, and unblocked the M4 skills grid + contact email. Verified via a temporary scaffold route plus `dist/` inspection (9 `h3`, 0 secondment blocks, no `<img>`, valid UTF-8, 0 emitted JS files), then rebuilt clean: 5 routes, sitemap 4 URLs. Open item: decision-3 (thumbnail pipeline — `public/` + `<img>` vs `src/` + `<Image>`), deferred by the owner. M4 (page builds) is next and unblocked; M5–M6 remain blocked on owner content/domain.

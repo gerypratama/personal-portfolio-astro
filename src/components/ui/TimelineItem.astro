@@ -1,0 +1,62 @@
+---
+// src/components/ui/TimelineItem.astro
+// Architecture Section 6.3 — renders a single work experience entry from
+// src/data/experience.ts, plus a nested secondment sub-entry when the entry
+// carries a `secondment` field.
+//
+// NOTE: no entry currently populates `secondment` — the May 2024 – Dec 2024 INA
+// Digital client engagement is omitted entirely per the confirmed owner decision
+// (.clinerules/03-content-status.md). The conditional block is kept because the
+// Experience type supports it (Architecture 5.1) and it costs nothing at build
+// time, so a future secondment entry renders without component changes.
+//
+// The nested block is visually subordinate: lighter border, indented margin and
+// muted text, sharing the same left rail (Architecture 6.3).
+
+import type { Experience } from '../../data/types';
+
+interface Props {
+  experience: Experience;
+}
+
+const { experience } = Astro.props;
+const { company, role, location, startDate, endDate, current, highlights, secondment } =
+  experience;
+---
+
+<article
+  class="timeline-item reveal-on-scroll relative border-l border-slate-200 pl-6 dark:border-slate-800"
+>
+  <span
+    class="absolute top-2 -left-[4.5px] h-2 w-2 rounded-full bg-indigo-600 dark:bg-indigo-500"
+    aria-hidden="true"
+  ></span>
+
+  {/* Main entry */}
+  <h3 class="text-base font-semibold tracking-tight">{role}</h3>
+  <p class="mt-0.5 text-sm text-slate-600 dark:text-slate-400">{company} · {location}</p>
+  <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+    {startDate} – {current ? 'Present' : endDate}
+  </p>
+
+  <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-400">
+    {highlights.map((highlight) => <li>{highlight}</li>)}
+  </ul>
+
+  {/* Nested secondment sub-entry — rendered only if present */}
+  {
+    secondment && (
+      <div class="mt-4 border-l border-slate-200 pl-4 dark:border-slate-800">
+        <p class="text-sm text-slate-600 dark:text-slate-400">
+          ↳ Client engagement: {secondment.client}
+        </p>
+        <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+          {secondment.startDate} – {secondment.endDate}
+        </p>
+        <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-400">
+          {secondment.highlights.map((highlight) => <li>{highlight}</li>)}
+        </ul>
+      </div>
+    )
+  }
+</article>

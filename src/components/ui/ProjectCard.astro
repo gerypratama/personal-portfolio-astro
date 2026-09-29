@@ -1,0 +1,90 @@
+---
+// src/components/ui/ProjectCard.astro
+// Architecture Section 6.2 — `ui` tier primitive consumed by /projects (PRD P1–P7)
+// and the home page featured preview (PRD H5).
+//
+// Thumbnails: public/images/projects/ still holds no image files (M5 blocker —
+// .clinerules/03-content-status.md). The media block therefore renders only when
+// the file actually exists, so no broken image can reach the build today and the
+// screenshots appear automatically once the assets land. Missing files are
+// reported as a build-time warning instead of silently rendering an empty frame
+// (a blank box would read as placeholder content, which PRD P4 rules out).
+//
+// TODO(decision-3): the thumbnail pipeline itself is an open owner decision
+// (`public/` + plain <img> vs `src/` + Astro <Image>). The markup below is the
+// only block that changes either way — see memory-bank/Decisions.md.
+
+import fs from 'node:fs';
+import path from 'node:path';
+
+import Button from './Button.astro';
+import SkillTag from './SkillTag.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  thumbnail: string;
+  techStack: string[];
+  liveUrl?: string;
+  repoUrl?: string;
+}
+
+const { title, description, thumbnail, techStack, liveUrl, repoUrl } = Astro.props;
+
+const thumbnailFile = path.join(process.cwd(), 'public', 'images', 'projects', thumbnail);
+const hasThumbnail = fs.existsSync(thumbnailFile);
+
+if (!hasThumbnail) {
+  console.warn(
+    `[ProjectCard] Missing thumbnail for "${title}" — expected public/images/projects/${thumbnail}. Media block omitted (.clinerules/03-content-status.md).`,
+  );
+}
+---
+
+<article
+  class="project-card reveal-on-scroll flex flex-col rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+>
+  {
+    hasThumbnail && (
+      <img
+        src={`/images/projects/${thumbnail}`}
+        alt={`${title} screenshot`}
+        width="800"
+        height="450"
+        loading="lazy"
+        decoding="async"
+        class="mb-4 h-auto w-full rounded-md border border-slate-200 dark:border-slate-800"
+      />
+    )
+  }
+
+  <h3 class="text-lg font-semibold tracking-tight">{title}</h3>
+  <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">{description}</p>
+
+  {
+    techStack.length > 0 && (
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {techStack.map((tech) => (
+          <SkillTag label={tech} />
+        ))}
+      </ul>
+    )
+  }
+
+  {
+    (liveUrl || repoUrl) && (
+      <div class="mt-auto flex flex-wrap items-center gap-4 pt-4">
+        {liveUrl && (
+          <Button variant="link" href={liveUrl} external>
+            Visit site <span aria-hidden="true">↗</span>
+          </Button>
+        )}
+        {repoUrl && (
+          <Button variant="link" href={repoUrl} external>
+            Source code <span aria-hidden="true">↗</span>
+          </Button>
+        )}
+      </div>
+    )
+  }
+</article>

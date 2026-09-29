@@ -20,7 +20,7 @@ Never mark a page or task "done" if it depends on blocked content below.
 ## Current status (update this table as content arrives)
 | Item | Blocks | Status |
 |---|---|---|
-| Bio copy (3+ yrs, full-stack framing) | /about, / | ⚠️ Draft resume exists, needs web adaptation |
+| Bio copy (3+ yrs, full-stack framing) | /about, / | ⚠️ Draft resume exists at `docs/resume_content.md`, needs web adaptation |
 | PawangBisnis description (2-3 sentences) | /projects | ❌ Not written |
 | IDSC description | /projects | ❌ Not written |
 | nyambat.id description | /projects | ❌ Not written |
@@ -30,22 +30,28 @@ Never mark a page or task "done" if it depends on blocked content below.
 | Custom domain decision | Global, deployment | ❌ Pending |
 | formly.email endpoint for new domain | /contact | ❌ Pending (works on preview domain in the meantime) |
 | IDSC project — public linkability | /projects | ✅ Confirmed — safe to link (live URL and/or repo, whichever exists) |
-| INA Digital — mention in work timeline | /about (Experience secondment field) | ✅ Confirmed — omit entirely, do not substitute generic wording |
+| INA Digital — mention in work timeline | /about (`experience.ts`) | ✅ Resolved — refined scope, see note below (secondment block omitted; standalone employment entry kept) |
+| Work history for the /about timeline | /about (`experience.ts`) | ✅ Source supplied — `docs/resume_content.md`; highlights used verbatim, nothing rewritten |
+| Project live URLs | /projects | ✅ Confirmed — PawangBisnis `https://pawangbisnis.com/`, IDSC `https://idsc.com.sg/`, nyambat.id `https://nyambat-id.vercel.app/`; no repo URLs provided |
 
 ### Note on IDSC vs INA Digital
 These are two different entities, not one blocked item:
 - **IDSC** is a project in `src/data/projects.ts` — public linkability is
   confirmed. Build it normally with `liveUrl`/`repoUrl` as available.
-- **INA Digital** appears only as a `secondment.client` value inside
-  `Experience` entries in `Technical_Architecture.md`'s type definitions
-  (i.e. a past-employer/client name in the work timeline, not a project).
-  Confirmed: OMIT it entirely.
-  - Do not populate `secondment.client` with "INA Digital" in `experience.ts`
-  - Do not substitute a generic description in its place either — if the
-    secondment period isn't presentable without naming the client, omit
-    that `secondment` block from the entry rather than inventing wording
-    around it
-  - This is resolved, not an open item — no further confirmation needed
+- **INA Digital** appears in the work timeline in two distinct ways, and the two
+  are handled differently (refined 2026-09-29 — the earlier ruling assumed it
+  appeared *only* as a secondment value, which the owner-supplied resume
+  disproved; see `memory-bank/Decisions.md`):
+  - **As a secondment client** on the PT. Digital Data Integrasi entry
+    (May 2024 – Dec 2024): OMIT that `secondment` block entirely.
+    - Do not populate `secondment.client` with "INA Digital" in `experience.ts`
+    - Do not substitute a generic description in its place either — the
+      secondment period is dropped rather than reworded around
+  - **As a standalone employer entry** (`Frontend Developer`,
+    May 2026 – Present, direct employment in `docs/resume_content.md`): KEEP it
+    as a normal `Experience` entry. This keeps the timeline matching the resume
+    (PRD A2) and gives /about a current role.
+  - Resolved — no further confirmation needed.
 
 ## What CAN proceed regardless of blocks
 Layout, component structure, styling, routing, dark mode, animations,

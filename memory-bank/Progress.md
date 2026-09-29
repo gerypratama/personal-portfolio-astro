@@ -20,17 +20,21 @@
 ### M2 — Layout shell & global infrastructure  (unblocked)
 **Goal:** Every page renders inside `BaseLayout` with working nav, dark mode (no FOUC), footer, and scroll reveal — main slot empty/placeholder.
 
-- [ ] `src/layouts/BaseLayout.astro`: `<head>` with title/description/ogImage props, OG tags, canonical (`Astro.url`), inline anti-FOUC theme script in `<head>` before styled content (Architecture 7.1), Header/Footer, `<slot/>`, scroll reveal init script (Architecture 8.1)
-- [ ] `src/components/layout/Header.astro`: nav links (Home, Projects, About, Contact — PRD GL1), ThemeToggle, CV download link (PRD GL4 — link works, PDF itself is blocked content)
-- [ ] `src/components/layout/Footer.astro`: dynamic copyright year (`new Date().getFullYear()`), LinkedIn + GitHub links (PRD GL3)
-- [ ] `src/components/ui/ThemeToggle.astro`: button with `aria-label`, sun/moon icons, toggle script with `localStorage` persistence (Architecture 7.2)
-- [ ] `src/scripts/theme.ts` + `src/scripts/animations.ts`: `initScrollReveal()` IntersectionObserver, unobserve after first reveal (Architecture 8.1)
-- [ ] Wire all 5 page files (`index`, `about`, `projects`, `contact`, `404`) to `BaseLayout` with placeholder `<slot>` content so nav/routes work end-to-end
-- [ ] Verify: dark mode toggles + persists, no FOUC on reload, `prefers-reduced-motion` disables reveal, keyboard-reachable toggle
+- [x] `src/layouts/BaseLayout.astro`: `<head>` with title/description/ogImage props, OG tags, canonical built from `Astro.site` + pathname, inline anti-FOUC theme script in `<head>` before styled content (Architecture 7.1), Header/Footer, `<slot/>`, scroll reveal init script (Architecture 8.1) + `<noscript>` fallback
+- [x] `src/components/layout/Header.astro`: nav links (Home, Projects, About, Contact — PRD GL1) with `aria-current="page"` active state, ThemeToggle, CV download link (PRD GL4 — link wired; PDF is still-blocked content so it 404s until M5)
+- [x] `src/components/layout/Footer.astro`: dynamic copyright year (`new Date().getFullYear()`), LinkedIn + GitHub links (PRD GL3 — profile URLs sourced from the live old site, see Decisions log)
+- [x] `src/components/ui/ThemeToggle.astro`: button with `aria-label` + synced `aria-pressed`, sun/moon inline SVG icons (shown via `dark:` variants), toggle logic in `src/scripts/theme.ts` with `localStorage` persistence (Architecture 7.2)
+- [x] `src/scripts/theme.ts` + `src/scripts/animations.ts`: `initThemeToggle()` + `initScrollReveal()` IntersectionObserver, unobserve after first reveal (Architecture 8.1)
+- [x] All 5 page files (`index`, `about`, `projects`, `contact`, `404`) wired to `BaseLayout` with clearly-marked `[PLACEHOLDER — M2 stub]` content so nav/routes work end-to-end (no invented copy, no placeholder project cards)
+- [x] Verified via `dist/` inspection: 5 routes built (`/`, `/about/`, `/projects/`, `/contact/`, `/404.html`), sitemap lists the 4 indexable URLs (404 correctly excluded), unique `<title>` + exactly one `<h1>` per page, canonical/OG URLs absolute, `.dark\:block:where(.dark,.dark *)` compiled into the CSS (class-based dark mode live), `prefers-reduced-motion` override + `<noscript>` fallback present, zero external JS files (both scripts inlined — far under the 10KB budget)
+- [ ] Outstanding browser check (dev server): toggle persists across reload, no FOUC on a hard reload, keyboard-reachable toggle, reduced-motion disables the reveal
+
+**Known gaps carried forward (not M2 defects):** `/images/og/og-default.jpg` is referenced as the OG default but the asset does not exist yet (M5/M6 SEO check); `/cv/gery-pratama-cv.pdf` 404s until the PDF lands in M5.
 
 **Maps to:** Architecture Sections 6, 7, 8 | PRD GL1, GL2, GL3, GL4, GL5, D2, D3, D4
 
-**Needs owner confirmation:** PRD Open Item O5 (color palette / design reference) — Architecture 7.3 specifies Slate+Indigo. Treat as default adjustable in `global.css`; confirm before M4 polish.
+**Resolved (2026-09-29):** PRD Open Item O5 (color palette / design reference) — Slate+Indigo from Architecture 7.3 remains the default, adjustable in `global.css`.
+**Resolved (2026-09-29):** PRD GL2/D2 ("light is the default, toggled manually") vs Architecture 7.1's OS-preference fallback — owner chose **Architecture**: first visit follows the OS preference, after that `localStorage` wins. See Decisions log.
 
 ---
 
@@ -107,7 +111,7 @@
 | Milestone | Status | PRs (dev→main) |
 |---|---|---|
 | M1 — Scaffold & tooling | ✅ Complete | 1 |
-| M2 — Layout shell | ✅ Unblocked | 1 |
+| M2 — Layout shell | ✅ Complete (structure verified; browser pass pending) | 1 |
 | M3 — Data + UI primitives | ✅ Unblocked | 1 |
 | M4 — Page builds (structure) | ✅ Unblocked (content placeholdered) | 1 |
 | M5 — Content integration | ❌ Blocked on owner content | — |
@@ -116,4 +120,4 @@
 M1–M4 can be executed back-to-back now — all unblocked foundation/structure work. 4 clean dev→main PRs deliver a fully functional (but content-incomplete) site on a Vercel preview URL. M5 and M6 wait on the owner.
 
 ## Last updated
-2026-08-02 — M1 (Scaffold & tooling) complete. Build verified via `dist/` inspection: Tailwind v4.3.3 CSS output confirmed (`dist/_astro/index.CjDIl9Wr.css`), sitemap generated (`dist/sitemap-index.xml` + `dist/sitemap-0.xml`). M2–M4 unblocked and ready to execute; M5–M6 blocked on owner content/domain.
+2026-09-29 — M2 (Layout shell & global infrastructure) complete. `BaseLayout`, `Header`, `Footer`, `ThemeToggle`, `src/scripts/{theme,animations}.ts` created and all 5 routes wired. Verified via `dist/` inspection: 5 routes built, sitemap holds the 4 indexable URLs (404 excluded), unique titles + one `h1` per page, absolute canonical/OG URLs, class-based dark variant compiled into the CSS, reduced-motion + `<noscript>` overrides present, no external JS files (both scripts inlined, far below the 10KB budget). Two doc conflicts resolved with the owner (dark-mode default, colour palette) — see Decisions log. M3 (data layer + UI primitives) is next and unblocked; M5–M6 remain blocked on owner content/domain.

@@ -1,0 +1,53 @@
+---
+// src/components/ui/ThemeToggle.astro
+// Architecture Section 7.2.
+//
+// The icon swap (sun in dark mode, moon in light mode) is driven entirely by
+// the `dark` class on <html> set by the inline script in BaseLayout.astro —
+// so the correct icon is painted on first paint with no JS involved here.
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  aria-label="Toggle dark mode"
+  aria-pressed="false"
+  class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-50 dark:focus-visible:outline-indigo-500"
+>
+  {/* Sun icon — shown in dark mode (clicking returns to light) */}
+  <svg
+    class="hidden h-5 w-5 dark:block"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.75"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path
+      d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+    ></path>
+  </svg>
+
+  {/* Moon icon — shown in light mode (clicking switches to dark) */}
+  <svg
+    class="block h-5 w-5 dark:hidden"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.75"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<script>
+  import { initThemeToggle } from '../../scripts/theme';
+
+  initThemeToggle();
+</script>

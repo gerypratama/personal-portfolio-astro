@@ -1,6 +1,17 @@
 @import "tailwindcss";
 
 /* ============================================
+   Dark mode strategy — class-based
+   Architecture Section 7.1 (Tailwind v4 translation)
+
+   v4 has no JS config (`darkMode: 'class'` is a v3 setting), so the
+   media-preference default is replaced with an explicit custom variant
+   bound to the `.dark` class on <html>. Without this, `dark:` utilities
+   follow the OS preference and the ThemeToggle would have no effect.
+   ============================================ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================
    CSS Custom Properties — Slate + Indigo palette
    Architecture Section 7.3
    ============================================ */

@@ -1,0 +1,25 @@
+---
+// M2 stub — route wiring only.
+// Real ContactForm (formly.email), static email fallback, social links and
+// freelance note are M4 (PRD C1–C7).
+// The formly.email endpoint for the new domain is still-blocked content
+// (.clinerules/03-content-status.md), so no <form action> is wired yet.
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contact — Gery Pratama"
+  description="Contact Gery Pratama — send a message through the contact form, or connect on LinkedIn or GitHub."
+>
+  <section class="mx-auto max-w-3xl px-6 py-16">
+    <div class="reveal-on-scroll">
+      <h1 class="text-3xl font-semibold tracking-tight">Contact</h1>
+      <p class="mt-4 text-slate-600 dark:text-slate-400">
+        [PLACEHOLDER — M2 stub. Contact form (C1–C4), static email fallback (C5)
+        and social links (C6) are built in M4. Form endpoint is pending — see
+        .clinerules/03-content-status.md.]
+      </p>
+    </div>
+  </section>
+</BaseLayout>

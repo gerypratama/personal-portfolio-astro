@@ -1,26 +1,24 @@
 ---
-import '../styles/global.css';
+// M2 stub — route wiring only.
+// Real Hero + FeaturedProjects composition is M4 (memory-bank/Progress.md).
+// All body copy here is an obvious, unshippable placeholder because the bio
+// copy is still-blocked content (.clinerules/03-content-status.md).
+
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>M1 Scaffold — Gery Pratama</title>
-	</head>
-	<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50">
-		<main class="flex min-h-screen items-center justify-center p-8">
-			<div class="text-center">
-				<h1 class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
-					M1 Scaffold Verified
-				</h1>
-				<p class="mt-4 text-slate-600 dark:text-slate-400">
-					Tailwind CSS v4 + Astro + sitemap — utility classes active.
-				</p>
-			</div>
-		</main>
-	</body>
-</html>
+<BaseLayout
+  title="Gery Pratama — Portfolio"
+  description="Portfolio of Gery Pratama — selected professional and personal software projects, work experience timeline, and contact details."
+>
+  <section class="mx-auto max-w-3xl px-6 py-16">
+    <div class="reveal-on-scroll">
+      <h1 class="text-3xl font-semibold tracking-tight">Gery Pratama</h1>
+      <p class="mt-4 text-slate-600 dark:text-slate-400">
+        [PLACEHOLDER — M2 stub. Hero (name, title, location, tagline, CTAs, CV
+        button) and FeaturedProjects are built in M4; bio copy is pending per
+        .clinerules/03-content-status.md.]
+      </p>
+    </div>
+  </section>
+</BaseLayout>

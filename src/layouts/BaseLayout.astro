@@ -1,0 +1,97 @@
+---
+// src/layouts/BaseLayout.astro
+// Architecture Section 6.1 — every page renders inside this layout.
+//
+// Note on the ogImage default: /images/og/og-default.jpg is the path specified
+// in the Architecture doc, but the asset itself has not been produced yet.
+// It is intentionally left as the documented default and flagged in
+// memory-bank/Progress.md — do not ship without the file (M6 SEO check).
+
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+}
+
+const { title, description, ogImage = '/images/og/og-default.jpg' } = Astro.props;
+
+// Built from Astro.url.pathname + configured `site` so canonical/OG URLs are
+// absolute and correct in both dev and the static build (Architecture Section 9).
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:url" content={canonicalURL} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+
+    {/* Scroll-reveal is progressive enhancement only: with JS disabled the
+        `.reveal-on-scroll` elements would never get `.is-visible` and would
+        stay invisible, so they are force-shown instead. Same rule as the
+        `prefers-reduced-motion` override in global.css (Architecture 8.2). */}
+    <noscript>
+      <style is:inline>
+        .reveal-on-scroll {
+          opacity: 1;
+          transform: none;
+        }
+      </style>
+    </noscript>
+
+    {/* CRITICAL: inline + before any styled content, so dark-mode visitors get
+        the right theme on first paint (no FOUC) — Architecture Section 7.1.
+        First visit follows the OS preference; after that the stored choice wins.
+        Approved resolution of the PRD GL2 / D2 vs Architecture 7.1 conflict —
+        see memory-bank/Decisions.md. */}
+    <script is:inline>
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (stored === 'dark' || (!stored && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+
+    <link rel="canonical" href={canonicalURL} />
+  </head>
+
+  <body class="flex min-h-screen flex-col bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-50">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      import { initScrollReveal } from '../scripts/animations';
+
+      // This module is deferred, so the DOM may already be parsed by the time
+      // it runs — otherwise DOMContentLoaded would never fire and the observer
+      // would never be attached.
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initScrollReveal);
+      } else {
+        initScrollReveal();
+      }
+    </script>
+  </body>
+</html>

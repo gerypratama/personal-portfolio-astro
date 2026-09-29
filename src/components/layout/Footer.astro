@@ -1,0 +1,40 @@
+---
+// src/components/layout/Footer.astro
+// PRD GL3 — dynamic copyright year, LinkedIn and GitHub links.
+//
+// Profile URLs were taken from the existing live site (gerypratama.vercel.app)
+// since they are not recorded in the PRD or Architecture doc — see
+// memory-bank/Decisions.md.
+
+const year = new Date().getFullYear();
+
+const socialLinks = [
+  { href: 'https://github.com/gerypratama/', label: 'GitHub' },
+  { href: 'https://www.linkedin.com/in/gery-pratama-oktaviano/', label: 'LinkedIn' },
+];
+---
+
+<footer class="border-t border-slate-200 dark:border-slate-800">
+  <div
+    class="mx-auto flex max-w-3xl flex-col gap-4 px-6 py-8 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between dark:text-slate-400"
+  >
+    <p>© {year} Gery Pratama</p>
+
+    <ul class="flex items-center gap-5">
+      {
+        socialLinks.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline-offset-4 transition-colors hover:text-slate-900 hover:underline dark:hover:text-slate-50"
+            >
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>

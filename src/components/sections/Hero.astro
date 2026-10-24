@@ -1,0 +1,37 @@
+---
+// src/components/sections/Hero.astro
+// PRD 6.1 H1–H4, H6 — identity block and CTAs. Consumed by pages/index.astro.
+//
+// H4 (tagline) is still-blocked content: the bio needs a web adaptation of
+// docs/resume_content.md before either can be written (.clinerules/03).
+// The placeholder is intentionally unshippable so it cannot reach production.
+
+import Button from '../ui/Button.astro';
+
+// PRD GL4 — link is wired now; the PDF itself lands in M5 (still-blocked).
+const cvHref = '/cv/gery-pratama-cv.pdf';
+---
+
+<section class="mx-auto max-w-3xl px-6 pt-16 pb-12 sm:pt-24">
+  <div class="reveal-on-scroll">
+    <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">
+      Gery Pratama Oktaviano
+    </h1>
+    <p class="mt-3 text-lg text-indigo-600 dark:text-indigo-400">
+      Software Engineer / Web Developer
+    </p>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+      Jakarta, Indonesia — open to remote
+    </p>
+
+    <p class="mt-6 max-w-2xl text-slate-600 dark:text-slate-400">
+      [PLACEHOLDER — tagline pending, see .clinerules/03-content-status.md]
+    </p>
+
+    <div class="mt-8 flex flex-wrap items-center gap-3">
+      <Button href="/projects">View My Work</Button>
+      <Button variant="secondary" href="/contact">Get In Touch</Button>
+      <Button variant="link" href={cvHref} download>Download CV</Button>
+    </div>
+  </div>
+</section>

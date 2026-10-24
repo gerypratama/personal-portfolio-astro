@@ -1,0 +1,46 @@
+---
+// src/components/sections/SkillsGrid.astro
+// PRD 6.2 A3 — skills grouped by category.
+//
+// Per Architecture Section 5 the skills object is defined directly in
+// about.astro (single consumer) and passed in here; this component stays
+// presentational. Skill groups come from docs/resume_content.md verbatim —
+// nothing is added or inferred.
+
+import SkillTag from '../ui/SkillTag.astro';
+
+interface Props {
+  groups: Array<{ label: string; skills: string[] }>;
+}
+
+const { groups } = Astro.props;
+
+const slugify = (label: string) =>
+  label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+---
+
+<div class="mt-6 grid gap-6 sm:grid-cols-2">
+  {
+    groups.map((group) => {
+      const headingId = `skills-${slugify(group.label)}`;
+      return (
+        <section aria-labelledby={headingId}>
+          <h3
+            id={headingId}
+            class="reveal-on-scroll text-sm font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400"
+          >
+            {group.label}
+          </h3>
+          <ul class="mt-3 flex flex-wrap gap-2">
+            {group.skills.map((skill) => (
+              <SkillTag label={skill} />
+            ))}
+          </ul>
+        </section>
+      );
+    })
+  }
+</div>

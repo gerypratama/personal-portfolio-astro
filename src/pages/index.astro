@@ -1,24 +1,18 @@
 ---
-// M2 stub — route wiring only.
-// Real Hero + FeaturedProjects composition is M4 (memory-bank/Progress.md).
-// All body copy here is an obvious, unshippable placeholder because the bio
-// copy is still-blocked content (.clinerules/03-content-status.md).
+// src/pages/index.astro
+// PRD 6.1 — Home. Hero (H1–H4, H6) + featured project preview (H5).
+// Bio copy / tagline are still-blocked content, so the Hero carries an
+// unshippable placeholder (.clinerules/03-content-status.md).
 
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import FeaturedProjects from '../components/sections/FeaturedProjects.astro';
 ---
 
 <BaseLayout
   title="Gery Pratama — Portfolio"
   description="Portfolio of Gery Pratama — selected professional and personal software projects, work experience timeline, and contact details."
 >
-  <section class="mx-auto max-w-3xl px-6 py-16">
-    <div class="reveal-on-scroll">
-      <h1 class="text-3xl font-semibold tracking-tight">Gery Pratama</h1>
-      <p class="mt-4 text-slate-600 dark:text-slate-400">
-        [PLACEHOLDER — M2 stub. Hero (name, title, location, tagline, CTAs, CV
-        button) and FeaturedProjects are built in M4; bio copy is pending per
-        .clinerules/03-content-status.md.]
-      </p>
-    </div>
-  </section>
+  <Hero />
+  <FeaturedProjects />
 </BaseLayout>

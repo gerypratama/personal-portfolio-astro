@@ -1,21 +1,27 @@
 ---
-// M2 stub — route wiring only.
-// On-brand 404 treatment (PRD GL6) is finished in M4.
+// src/pages/404.astro
+// PRD GL6 — on-brand not-found page with a clear route back.
 
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
 ---
 
 <BaseLayout
-  title="404 — Page Not Found — Gery Pratama"
-  description="The page you requested does not exist. Use the navigation to find projects, the work timeline, or contact details."
+  title="Page Not Found — Gery Pratama"
+  description="The page you're looking for doesn't exist. Return to the homepage."
 >
-  <section class="mx-auto max-w-3xl px-6 py-16">
+  <section class="mx-auto flex max-w-3xl flex-col items-start px-6 py-24">
     <div class="reveal-on-scroll">
-      <h1 class="text-3xl font-semibold tracking-tight">404 — Page not found</h1>
-      <p class="mt-4 text-slate-600 dark:text-slate-400">
-        [PLACEHOLDER — M2 stub. Nothing here matches that address. Head back to
-        the homepage, or use the navigation above.]
+      <p class="text-sm font-medium tracking-wide text-indigo-600 uppercase dark:text-indigo-400">
+        Error 404
       </p>
+      <h1 class="mt-2 text-3xl font-semibold tracking-tight">Page not found</h1>
+      <p class="mt-4 max-w-md text-slate-600 dark:text-slate-400">
+        The page you're looking for doesn't exist or has been moved.
+      </p>
+      <div class="mt-8">
+        <Button href="/">Back to home</Button>
+      </div>
     </div>
   </section>
 </BaseLayout>

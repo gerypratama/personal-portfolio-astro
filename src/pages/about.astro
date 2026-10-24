@@ -1,24 +1,70 @@
 ---
-// M2 stub — route wiring only.
-// Real WorkTimeline / SkillsGrid / bio composition is M4.
-// Bio copy is still-blocked content (.clinerules/03-content-status.md) —
-// no substituted or invented wording is used here.
+// src/pages/about.astro
+// PRD 6.2 — About. A1 bio (blocked placeholder), A2 work timeline,
+// A3 grouped skills, A4 CV button. A5: no "Coming Soon" copy anywhere.
+//
+// Skills are defined here rather than in src/data/ per Architecture Section 5
+// (single consumer). Every entry is copied from docs/resume_content.md.
 
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import WorkTimeline from '../components/sections/WorkTimeline.astro';
+import SkillsGrid from '../components/sections/SkillsGrid.astro';
+
+const skillGroups = [
+  {
+    label: 'Frontend',
+    skills: ['TypeScript', 'React', 'Next.js', 'Astro', 'Remix', 'Tailwind CSS', 'HTML5', 'CSS3'],
+  },
+  {
+    label: 'Backend',
+    skills: ['Node.js', 'Express', 'NestJS', 'Python', 'Flask', 'REST APIs'],
+  },
+  {
+    label: 'Databases',
+    skills: ['Neo4j', 'PostgreSQL', 'MongoDB', 'SQL'],
+  },
+  {
+    label: 'Tools',
+    skills: ['Git', 'Docker', 'Turborepo', 'GCP', 'n8n'],
+  },
+];
 ---
 
 <BaseLayout
   title="About — Gery Pratama"
   description="About Gery Pratama — work experience timeline and the technologies used across professional and personal projects."
 >
-  <section class="mx-auto max-w-3xl px-6 py-16">
-    <div class="reveal-on-scroll">
-      <h1 class="text-3xl font-semibold tracking-tight">About</h1>
-      <p class="mt-4 text-slate-600 dark:text-slate-400">
-        [PLACEHOLDER — M2 stub. Bio copy (A1–A3), WorkTimeline, SkillsGrid and CV
-        button are built in M4. Bio is blocked content — see
-        .clinerules/03-content-status.md.]
+  <div class="mx-auto max-w-3xl px-6 py-16">
+    {/* A1 — bio copy is still blocked; placeholder is unshippable on purpose */}
+    <section aria-labelledby="bio-heading">
+      <h1 id="bio-heading" class="reveal-on-scroll text-3xl font-semibold tracking-tight">
+        About
+      </h1>
+      <p class="reveal-on-scroll mt-4 text-slate-600 dark:text-slate-400">
+        [PLACEHOLDER — bio pending, see .clinerules/03-content-status.md]
       </p>
-    </div>
-  </section>
+
+      {/* A4 — CV download; PDF itself is blocked until M5 */}
+      <div class="mt-6">
+        <Button href="/cv/gery-pratama-cv.pdf" download>Download CV</Button>
+      </div>
+    </section>
+
+    {/* A2 — work timeline */}
+    <section class="mt-16" aria-labelledby="experience-heading">
+      <h2 id="experience-heading" class="reveal-on-scroll text-2xl font-semibold tracking-tight">
+        Experience
+      </h2>
+      <WorkTimeline />
+    </section>
+
+    {/* A3 — skills grouped by category */}
+    <section class="mt-16" aria-labelledby="skills-heading">
+      <h2 id="skills-heading" class="reveal-on-scroll text-2xl font-semibold tracking-tight">
+        Skills
+      </h2>
+      <SkillsGrid groups={skillGroups} />
+    </section>
+  </div>
 </BaseLayout>

@@ -1,25 +1,91 @@
 ---
-// M2 stub — route wiring only.
-// Real ContactForm (formly.email), static email fallback, social links and
-// freelance note are M4 (PRD C1–C7).
-// The formly.email endpoint for the new domain is still-blocked content
-// (.clinerules/03-content-status.md), so no <form action> is wired yet.
+// src/pages/contact.astro
+// PRD 6.4 — Contact. C1–C4 live in ContactForm; C5 static email fallback
+// (from docs/resume_content.md); C6 LinkedIn/GitHub; C7 freelance note.
+// The form endpoint and success state are still blocked (.clinerules/03).
 
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/sections/ContactForm.astro';
+
+// Source of truth: docs/resume_content.md (owner-supplied).
+const email = 'gerypratama.o@gmail.com';
+const socialLinks = [
+  {
+    href: 'https://www.linkedin.com/in/gery-pratama-oktaviano/',
+    label: 'LinkedIn',
+    ariaLabel: 'Gery Pratama Oktaviano on LinkedIn',
+  },
+  {
+    href: 'https://github.com/gerypratama',
+    label: 'GitHub',
+    ariaLabel: 'Gery Pratama on GitHub',
+  },
+];
 ---
 
 <BaseLayout
   title="Contact — Gery Pratama"
   description="Contact Gery Pratama — send a message through the contact form, or connect on LinkedIn or GitHub."
 >
-  <section class="mx-auto max-w-3xl px-6 py-16">
-    <div class="reveal-on-scroll">
-      <h1 class="text-3xl font-semibold tracking-tight">Contact</h1>
-      <p class="mt-4 text-slate-600 dark:text-slate-400">
-        [PLACEHOLDER — M2 stub. Contact form (C1–C4), static email fallback (C5)
-        and social links (C6) are built in M4. Form endpoint is pending — see
-        .clinerules/03-content-status.md.]
+  <div class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="reveal-on-scroll text-3xl font-semibold tracking-tight">Contact</h1>
+    <p class="reveal-on-scroll mt-4 max-w-2xl text-slate-600 dark:text-slate-400">
+      Have a project in mind, or a role you think I'd be a good fit for? Send a
+      message below.
+    </p>
+
+    {/* C1–C4 */}
+    <section class="mt-10" aria-labelledby="contact-form-heading">
+      <h2 id="contact-form-heading" class="reveal-on-scroll text-xl font-semibold tracking-tight">
+        Send a message
+      </h2>
+      <div class="reveal-on-scroll">
+        <ContactForm />
+      </div>
+    </section>
+
+    {/* C5 — static email fallback */}
+    <section class="mt-12" aria-labelledby="email-heading">
+      <h2 id="email-heading" class="reveal-on-scroll text-xl font-semibold tracking-tight">
+        Or email me directly
+      </h2>
+      <p class="reveal-on-scroll mt-3 text-slate-600 dark:text-slate-400">
+        <a
+          href={`mailto:${email}`}
+          class="text-indigo-600 underline-offset-4 hover:underline dark:text-indigo-400"
+        >
+          {email}
+        </a>
       </p>
-    </div>
-  </section>
+    </section>
+
+    {/* C6 — social links */}
+    <section class="mt-12" aria-labelledby="elsewhere-heading">
+      <h2 id="elsewhere-heading" class="reveal-on-scroll text-xl font-semibold tracking-tight">
+        Elsewhere
+      </h2>
+      <ul class="reveal-on-scroll mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        {
+          socialLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.ariaLabel}
+                class="text-indigo-600 underline-offset-4 hover:underline dark:text-indigo-400"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {/* C7 — freelance / contract note (Should) */}
+    <p class="reveal-on-scroll mt-12 text-sm text-slate-500 dark:text-slate-400">
+      Open to freelance and contract work alongside full-time opportunities.
+    </p>
+  </div>
 </BaseLayout>

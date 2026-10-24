@@ -1,0 +1,49 @@
+---
+// src/components/sections/FeaturedProjects.astro
+// PRD 6.1 H5 (Should) — the top 2 `featured` projects, reusing the same
+// ProjectCard primitive as /projects so the preview cannot drift from it.
+//
+// Project descriptions are still-blocked content (PRD P4 forbids placeholder
+// cards); the data layer already carries unshippable placeholder strings and
+// the M5 content pass replaces them. The media block is omitted until real
+// thumbnails land (see ProjectCard + decision-3 in memory-bank/Decisions.md).
+
+import { featuredProjects } from '../../data/projects';
+import Button from '../ui/Button.astro';
+import ProjectCard from '../ui/ProjectCard.astro';
+
+// Architecture 5.2 exports featuredProjects already filtered; slice to the
+// two-card limit from the PRD and keep the documented `order` sequence.
+const previewProjects = featuredProjects
+  .slice()
+  .sort((a, b) => a.order - b.order)
+  .slice(0, 2);
+---
+
+{
+  previewProjects.length > 0 && (
+    <section class="mx-auto max-w-3xl px-6 pb-16" aria-labelledby="featured-projects-heading">
+      <div class="reveal-on-scroll flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+        <h2 id="featured-projects-heading" class="text-xl font-semibold tracking-tight">
+          Featured projects
+        </h2>
+        <Button variant="link" href="/projects">
+          All projects <span aria-hidden="true">→</span>
+        </Button>
+      </div>
+
+      <div class="mt-6 grid gap-5 sm:grid-cols-2">
+        {previewProjects.map((project) => (
+          <ProjectCard
+            title={project.title}
+            description={project.description}
+            thumbnail={project.thumbnail}
+            techStack={project.techStack}
+            liveUrl={project.liveUrl}
+            repoUrl={project.repoUrl}
+          />
+        ))}
+      </div>
+    </section>
+  )
+}

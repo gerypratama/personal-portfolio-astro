@@ -1,0 +1,36 @@
+---
+// src/components/sections/WorkTimeline.astro
+// PRD 6.2 A2 — chronological work timeline from src/data/experience.ts.
+//
+// Entries are split by `category` (Architecture 5.1): current/recent
+// engineering roles render under the page's "Experience" heading, while the
+// older non-engineering roles get their own sub-heading. INA Digital's
+// secondment block is intentionally absent (owner decision — .clinerules/03).
+
+import { experience } from '../../data/experience';
+import TimelineItem from '../ui/TimelineItem.astro';
+
+const primary = experience.filter((entry) => entry.category === 'primary');
+const prior = experience.filter((entry) => entry.category === 'prior');
+---
+
+<div class="mt-6 space-y-10">
+  <div class="space-y-8">
+    {primary.map((entry) => <TimelineItem experience={entry} />)}
+  </div>
+
+  {
+    prior.length > 0 && (
+      <div>
+        <h3 class="reveal-on-scroll text-sm font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">
+          Earlier roles
+        </h3>
+        <div class="mt-5 space-y-8">
+          {prior.map((entry) => (
+            <TimelineItem experience={entry} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+</div>

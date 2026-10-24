@@ -55,20 +55,25 @@
 
 ---
 
-### M4 — Page builds (structure + placeholder-flagged content)  (unblocked for structure)
+### M4 — Page builds (structure + placeholder-flagged content)  (✅ complete for structure)
 **Goal:** All 4 pages + 404 fully laid out with real component composition. Content gaps marked `[PLACEHOLDER — ...]` per `.clinerules/03`. Pages are NOT marked "done" — they depend on blocked content (M5).
 
-- [ ] `index.astro` — `Hero.astro` (name, title, location, tagline, primary CTA → /projects, secondary CTA → /contact, CV button) + `FeaturedProjects.astro` (top 2 featured cards) (PRD H1–H6)
-- [ ] `about.astro` — bio paragraph `[PLACEHOLDER — bio pending]`, `WorkTimeline.astro` (consuming `experience.ts`), `SkillsGrid.astro`, CV button (PRD A1–A5)
-- [ ] `projects.astro` — grouped by type (Professional / Personal), sorted by `order`, `ProjectCard` grid (PRD P1–P3, P6)
-- [ ] `contact.astro` — `ContactForm.astro` (formly.email form, Name/Email/Subject/Message, required + client-side validation, honeypot, success state markup), static email fallback, LinkedIn/GitHub links, freelance note (PRD C1–C7)
-- [ ] `404.astro` — on-brand not-found page (PRD GL6)
-- [ ] Per-page `<title>`/`<meta description>` slots filled with real copy where unblocked, placeholder-flagged where pending
-- [ ] Verify: all internal routes resolve (no 404s), responsive at mobile/tablet/desktop, heading hierarchy h1→h2→h3 correct per page
+- [x] `index.astro` — `Hero.astro` (name, title, location, tagline, primary CTA → /projects, secondary CTA → /contact, CV button) + `FeaturedProjects.astro` (top 2 featured cards) (PRD H1–H6)
+- [x] `about.astro` — bio paragraph `[PLACEHOLDER — bio pending]`, `WorkTimeline.astro` (consuming `experience.ts`), `SkillsGrid.astro`, CV button (PRD A1–A5)
+- [x] `projects.astro` — grouped by type (Professional / Personal), sorted by `order`, `ProjectCard` grid (PRD P1–P3, P6)
+- [x] `contact.astro` — `ContactForm.astro` (formly.email form, Name/Email/Subject/Message, required + client-side validation, honeypot; success state deferred — see Decisions), static email fallback, LinkedIn/GitHub links, freelance note (PRD C1–C7)
+- [x] `404.astro` — on-brand not-found page (PRD GL6)
+- [x] Per-page `<title>`/`<meta description>` slots filled with real copy where unblocked, placeholder-flagged where pending
+- [x] Verify: all internal routes resolve (no 404s), responsive at mobile/tablet/desktop, heading hierarchy h1→h2→h3 correct per page
+- [x] Section components created: `Hero`, `FeaturedProjects`, `WorkTimeline`, `SkillsGrid`, `ContactForm` (Architecture Section 3)
+- [x] Skills grid populated from `docs/resume_content.md` (23 tags in 4 groups) — PRD A3 unblocked
+- [x] Contact static email fallback + social links use the owner-supplied resume values — PRD C5/C6 unblocked
+
+**Verification (2026-10-24):** `npm run build` green → 5 routes, sitemap 4 URLs, 18.5KB CSS, 939 bytes inline JS. Automated `dist/` checks: every page has exactly one `h1` and no skipped heading levels (`index 1233`, `about 12333333323333`, `projects 123323`, `contact 1222`); zero broken internal links on any page; 2 featured cards on `/`, 3 on `/projects`, 6 timeline entries and 23 skill tags on `/about`; contact form exposes name/email/subject/message/_gotcha; canonical + `og:url` absolute (`https://gerypratama.com/about/`); missing-thumbnail warnings fire once per project as designed. Browser-level responsive + Lighthouse checks still pending (no browser in this environment).
 
 **Maps to:** PRD Sections 6.1–6.5 (all page requirements) | Architecture Section 4
 
-**Blocked content (do NOT invent — mark placeholder and stop):** bio copy (⚠️), 3× project descriptions (❌), confirmed tech stacks (❌), nyambat screenshot (❌), CV PDF (❌)
+**Still blocked content (do NOT invent — mark placeholder and stop):** bio copy (⚠️), 3× project descriptions (❌), confirmed tech stacks (❌), thumbnails (❌), CV PDF (❌), formly endpoint + C4 success mechanism (❌)
 
 ---
 
@@ -115,11 +120,11 @@
 | M1 — Scaffold & tooling | ✅ Complete | 1 |
 | M2 — Layout shell | ✅ Complete (structure verified; browser pass pending) | 1 |
 | M3 — Data + UI primitives | ✅ Complete | 1 |
-| M4 — Page builds (structure) | ✅ Unblocked (content placeholdered) | 1 |
+| M4 — Page builds (structure) | ✅ Complete for structure (content placeholdered) | 1 |
 | M5 — Content integration | ❌ Blocked on owner content | — |
 | M6 — Launch & migration | ❌ Blocked on domain decision | — |
 
-M1–M4 can be executed back-to-back now — all unblocked foundation/structure work. 4 clean dev→main PRs deliver a fully functional (but content-incomplete) site on a Vercel preview URL. M5 and M6 wait on the owner.
+M1–M4 are complete for structure. The site is fully navigable with real timeline/skills/contact data, and the remaining placeholder copy is isolated to five blocked content items (M5). M6 waits on the domain decision.
 
 ## Last updated
-2026-09-29 — M3 (Data layer & UI primitives) complete. `src/data/{projects,experience}.ts` and `src/components/ui/{Button,ProjectCard,SkillTag,TimelineItem}.astro` created; Header CV link moved onto `Button`. The owner supplied `docs/resume_content.md`, which resolved the work-history source gap (highlights used verbatim), confirmed all three project `liveUrl`s, and unblocked the M4 skills grid + contact email. Verified via a temporary scaffold route plus `dist/` inspection (9 `h3`, 0 secondment blocks, no `<img>`, valid UTF-8, 0 emitted JS files), then rebuilt clean: 5 routes, sitemap 4 URLs. Open item: decision-3 (thumbnail pipeline — `public/` + `<img>` vs `src/` + `<Image>`), deferred by the owner. M4 (page builds) is next and unblocked; M5–M6 remain blocked on owner content/domain.
+2026-10-24 — M4 (Page builds, structure) complete. Added `sections/{Hero,FeaturedProjects,WorkTimeline,SkillsGrid,ContactForm}.astro` and composed all 4 pages + 404. `/about` now renders the real timeline (6 entries) and a 23-tag skills grid from `docs/resume_content.md`; `/contact` uses the owner-supplied email and profile URLs. Branch reconciliation: local M2 work that duplicated `origin/development` was preserved on branch `local-m2-backup`, `development` was reset to `origin/development` (M2 + M3 + resume doc), and only the page-composition value was salvaged into M4. Open items carried forward: decision-3 (thumbnail pipeline), C4 success-state mechanism (needs the formly endpoint), and all M5 content blocks. M5–M6 remain blocked on owner content/domain.

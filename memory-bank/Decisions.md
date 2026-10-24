@@ -256,3 +256,47 @@ indexable URLs. Also noted: the Header CV link now renders through
 indigo-400 — deliberate (it is a Must-level CTA) but a visible header restyle.
 **Source:** Architecture Sections 6, 14, 15; PRD GL4, S6; M1/M2 verification precedent.
 
+---
+
+### 2026-10-24 — Divergent M2 branches reconciled by resetting to origin
+**Context:** Local work on `development` had implemented M2 independently
+(`4a2410d` + `047cdb0`), while `origin/development` already carried a different,
+further-along M2 (`08dde72`), M3 (`9ee1e2e`) and the owner-supplied
+`docs/resume_content.md` (`1cd4161`). The two histories diverged at `aca9321`,
+so `git pull` (rebase) conflicted on nearly every shared file. Merging would
+have regressed M3 and produced a hybrid of two design systems.
+**Decision:** Preserve the local commits on branch `local-m2-backup`, reset
+`development` hard to `origin/development`, and salvage only the genuinely
+additive local work — the richer page composition (hero, contact form, 404)
+— into M4 section components styled against the origin design system. The two
+local "fixes" (missing `global.css` import, hard-to-reach CV link) were already
+solved better on origin (`Astro.site`-absolute canonical URLs, `Button`-based
+CV link), so nothing was lost.
+**Source:** Judgment call — not covered in docs; both branches satisfied M2 on
+paper but the remote was authoritative.
+
+---
+
+### 2026-10-24 — M4 composition decisions
+**Context:** Building the pages surfaced three judgment calls not settled by
+the PRD or Architecture doc.
+1. **Skills source (PRD A3):** `docs/resume_content.md` lists skills by
+   technology group. Grouped into Frontend / Backend / Databases / Tools,
+   copied verbatim (23 tags). Defined as a `skillGroups` object inside
+   `about.astro` and passed to `SkillsGrid.astro`, per Architecture Section 5
+   (single consumer, no separate data file).
+2. **Contact fallbacks (PRD C5/C6):** static email `gerypratama.o@gmail.com`
+   and the LinkedIn/GitHub URLs come from the owner-supplied resume, matching
+   the existing Footer URLs. No address was invented.
+3. **C4 success state:** deliberately not implemented yet. A static form has no
+   post-submit state of its own; the mechanism depends on formly.email's
+   redirect configuration, which cannot exist until the endpoint is provisioned
+   for the production domain. Rather than add JavaScript outside the
+   sanctioned theme/scroll scripts, the form ships with a placeholder action
+   and the success handling is decided in M5.
+4. **Project cards with placeholder descriptions:** rendered as flagged in
+   `.clinerules/03` (unshippable string from the data layer) because PRD P4
+   blocks page completion, not structure work. The page is explicitly not
+   marked content-complete.
+**Source:** PRD 6.2/6.4/6.3, A3, C4–C6, P4; Architecture Sections 5, 6, 11;
+judgment calls where the docs are silent.
